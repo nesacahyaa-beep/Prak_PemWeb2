@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 
 class MatakuliahController extends Controller
 {
-    private $daftarMatakuliah = [
-        ['kode' => 'WEB2', 'nama' => 'Pemrograman Web II', 'sks' => 3, 'semester' => 4],
-        ['kode' => 'BD2', 'nama' => 'Basis Data II', 'sks' => 3, 'semester' => 4],
-        ['kode' => 'MSO', 'nama' => 'Manajemen Sistem Operasi', 'sks' => 2, 'semester' => 2],
-        ['kode' => 'JARKOM', 'nama' => 'Jaringan Komputer', 'sks' => 3, 'semester' => 4],
-    ];
+   private $daftarMatakuliah = [
+    ['kode' => 'WEB2', 'nama' => 'Pemrograman Web II', 'sks' => 3, 'semester' => 4],
+    ['kode' => 'BD2', 'nama' => 'Basis Data II', 'sks' => 3, 'semester' => 4],
+    ['kode' => 'MSO', 'nama' => 'Manajemen Sistem Operasi', 'sks' => 2, 'semester' => 2],
+    ['kode' => 'JARKOM', 'nama' => 'Jaringan Komputer', 'sks' => 3, 'semester' => 4],
+    ['kode' => 'ALGO', 'nama' => 'Algoritma Pemrograman', 'sks' => 3, 'semester' => 1],
+];
 
     public function index(Request $request)
     {

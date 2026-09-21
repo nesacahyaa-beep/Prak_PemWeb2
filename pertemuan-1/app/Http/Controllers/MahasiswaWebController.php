@@ -5,22 +5,31 @@ namespace App\Http\Controllers;
 use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MahasiswaWebController extends Controller
 {
-    // 1. Menampilkan daftar seluruh mahasiswa (dengan Pagination & Eager Loading)
+    /**
+     * Menampilkan daftar mahasiswa menggunakan Eager Loading (with)
+     * dan memantau kueri SQL menggunakan DB::listen.
+     */
     public function index()
     {
-        DB::listen(function ($kueri) {
-            logger($kueri->sql);
+        // Mendengarkan dan mencatat setiap kueri SQL yang dieksekusi ke storage/logs/laravel.log
+        DB::listen(function ($query) {
+            Log::info("Kueri SQL: " . $query->sql . " | Waktu: " . $query->time . "ms");
         });
 
+        // Menggunakan Eager Loading 'with()' untuk mengambil relasi 'programStudi'
+        // Mencegah N+1 Query Problem sehingga kueri SQL hanya berjalan 2 kali
         $daftarMahasiswa = Mahasiswa::with('programStudi')->paginate(10);
 
         return view('mahasiswa.index', compact('daftarMahasiswa'));
     }
 
-    // 2. Menampilkan detail mahasiswa beserta relasi matakuliah dan nilai pivot-nya
+    /**
+     * Menampilkan detail data mahasiswa beserta relasi matakuliah dan nilai pivot.
+     */
     public function show($id)
     {
         $mahasiswa = Mahasiswa::with(['programStudi', 'matakuliah'])->findOrFail($id);
@@ -28,7 +37,9 @@ class MahasiswaWebController extends Controller
         return view('mahasiswa.show', compact('mahasiswa'));
     }
 
-    // 3. Menampilkan Top 10 Mahasiswa IPK Tertinggi Prodi Teknik Komputer
+    /**
+     * Menampilkan Top 10 IPK Mahasiswa Program Studi Teknik Komputer.
+     */
     public function topTk()
     {
         $daftarMahasiswa = Mahasiswa::with('programStudi')
